@@ -21,13 +21,15 @@ def start_text():
 
 
 # ========================== CHARACTER CLASS =======================
+
+classes = ["mage", "giant", "knight", "elf"]
 def pick_class():
     print(" ")
     print("Choose your class")
     print(" ")
     global char_class
     char_class = input("Choose Mage, Giant, Knight, or Elf: ")
-    if char_class.lower() == "mage" or char_class == "giant" or char_class == "knight" or char_class == "elf":
+    if char_class.lower() in classes:
         print("You selected the " + char_class + " class!")
     else:
         print("Sorry you did not type the class correctly. Make sure to type it exactly as it is shown")

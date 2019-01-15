@@ -1,5 +1,8 @@
 import sys
 from Calc import calc
+import random
+
+print(random.randrange(2, 10))
 
 
 def main_menu():

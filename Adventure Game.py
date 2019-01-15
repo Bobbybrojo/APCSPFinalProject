@@ -1,9 +1,10 @@
-# ========================= IMPORTS ============================
+# ========================================== IMPORTS ======================================================
 
 import random
+import time
+import sys
 
-
-# ====================== WELCOME SCREEN =========================
+# ====================================== WELCOME SCREEN ========================================================
 def start_text():
     print(" #_______________________________________________# ")
     print(" |------You have accessed the adventure app------| ")
@@ -20,14 +21,16 @@ def start_text():
     return 0
 
 
-# ========================== CHARACTER CLASS =======================
+# =========================================== CHARACTER CLASS ==================================================
 
 classes = ["mage", "giant", "knight", "elf"]
+
+
 def pick_class():
+    global char_class
     print(" ")
     print("Choose your class")
     print(" ")
-    global char_class
     char_class = input("Choose Mage, Giant, Knight, or Elf: ")
     if char_class.lower() in classes:
         print("You selected the " + char_class + " class!")
@@ -46,8 +49,10 @@ def pick_class():
     return 0
 
 
-# ============================= CHARACTER STATS ==========================
+# ======================================= CHARACTER STATS ======================================================
 
+
+# +++++++++++++++ Class Stat Variables ++++++++++
 stat_default = ("1) Health = ", "2) Damage = ", "3) Agility = ")  # Agility stat out of 10
 mage_stats = (100, 22, 4)
 giant_stats = (250, 12, 2)
@@ -55,6 +60,7 @@ knight_stats = (170, 17, 5)
 elf_stats = (150, 20, 7)
 
 
+# +++++++++++++++ Prints Stats ++++++++++++++++
 def print_stats():
     print("------------Stats------------")
     if char_class.lower() == "mage":
@@ -80,12 +86,46 @@ def print_stats():
     return 0
 
 
-# ======================= PRINT INVENTORY ============================
+# +++++++++++++ Defines Player Variables ++++++++++++
+def player_variables():
+    global class_stats
+    global can_use_magic
+    if char_class.lower() == "mage":
+        class_stats = mage_stats
+        can_use_magic = False
+    if char_class.lower() == "giant":
+        class_stats = giant_stats
+        can_use_magic = False
+    if char_class.lower() == "knight":
+        class_stats = knight_stats
+        can_use_magic = False
+    if char_class.lower() == "elf":
+        class_stats = elf_stats
+        can_use_magic = False
+
+
+# ========================================= PLAYER CLASS ==========================================================
+class Player:
+    def __init__(self, race, player_stats, magic):
+        self.race = race
+        self.player_stats = player_stats
+        self.magic = magic
+
+
+def generate_player_card():
+    global main_character
+    main_character = Player(char_class, class_stats, can_use_magic)
+
+
+# ========================================== INVENTORY ===========================================================
+
+# ++++++++++ Inventory Variables +++++++++++++
 coins = 0
 inventory_guide = ["1) Weapon Level: ", "2) Coin amount: ", "3) Damage booster: "]
 inventory = ["Basic Attack Weapon", coins, "DmgBoost: 0"]
 
 
+# +++++++++ Prints Inventory +++++++++
 def inventory_print():
     print("-------------Inventory-------------")
     i = 0
@@ -95,7 +135,36 @@ def inventory_print():
     return 0
 
 
-# ========================= MAP LOCATION CLASS =========================
+# =============================================Enemies===========================================================
+
+
+# +++++++++++++++++++ Enemy Types ++++++++++++++++
+enemy_types = ["Slime", "Goblin", "-Witch Sister-", "Mutant Rat", "-Mutant Bear-", "Sand Crawler", "Small Crab",
+               "Large Crab", "Squid", "-Kraken-", "Castle Guard", "Archer Guard", "-Behemoth Dragon-"]
+
+
+class Enemy:
+    def __init__(self, type, health, damage_range, is_boss):
+        self.type = type
+        self.health = health
+        self.damage = damage_range
+        self.is_boss = is_boss
+
+
+slime = Enemy(enemy_types[0], 20, (1, 10), False)
+goblin = Enemy(enemy_types[1], 30, (3, 12), False)
+witch_sister1 = Enemy(enemy_types[2], 45, (10, 25), True)
+witch_sister2 = Enemy(enemy_types[2], 45, (10, 25), True)
+witch_sister3 = Enemy(enemy_types[2], 45, (10, 25), True)
+mutant_rat = Enemy(enemy_types[3], 35, (13, 15), False)
+mutant_bear = Enemy(enemy_types[4], 60, (20, 30), True)
+sand_crawler = Enemy(enemy_types[5], 35, (15, 30), False)
+
+
+# ============================================== MAP ============================================================
+
+
+# ++++++++++++++++++ Map Location Class +++++++++++++++
 class Location:
     def __init__(self, map_name, true_name, grid_location, description, can_access, is_completed):
         self.map_name = map_name
@@ -204,7 +273,7 @@ unkown4 = Location("         UnKoWn",
                    is_completed=False)
 
 
-# ======================= PRINTS MAP ======================
+# +++++++++++++++++++++ Prints Map +++++++++++++++++++++++++++
 def print_map():
     print("\n------------------------------- M A P -----------------------------")
     print("###################################################################")
@@ -219,13 +288,26 @@ def print_map():
     print("###################################################################")
 
 
-start_text()
-pick_class()
-inventory_print()
-print_map()
+# ================================================= SMOOTH PRINT ===================================================
+def smooth_print(string):
+    for char in string:
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        time.sleep(0.10)
+    return
 
-# main game play loop
-def path_choose():
 
-    return 0
+def on_start():
+    start_text()
+    pick_class()
+    player_variables()
+    generate_player_card()
+    return
+
+
+def gameplay():
+    print_map()
+    inventory_print()
+
+
 

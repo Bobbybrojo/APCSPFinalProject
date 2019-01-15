@@ -33,11 +33,11 @@ def calc():
         print("Sorry you entered something wrong :( try entering the symbols for multiplication")
     return_to_main_menu = input("Would you like to return to the main menu? Y/N: ")
     if return_to_main_menu.lower() == "y" or return_to_main_menu == "yes":
-        main_menu()
+        pass
     else:
         print(" ")
         calc()
-    return 0;
+        return 0
 
 
 
